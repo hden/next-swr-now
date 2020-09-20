@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "standard"
+    "lint": "standard",
+    "test": "mocha --require esm --require intelli-espower-loader"
   },
   "dependencies": {
     "is": "^3.3.0",
@@ -16,6 +17,11 @@
     "swr": "^0.3.2"
   },
   "devDependencies": {
+    "esm": "^3.2.25",
+    "intelli-espower-loader": "^1.0.1",
+    "mocha": "^8.1.3",
+    "power-assert": "^1.6.1",
+    "sinon": "^9.0.3",
     "standard": "^14.3.4"
   }
 }
