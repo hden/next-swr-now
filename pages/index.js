@@ -28,7 +28,7 @@ export default function Home () {
     // Optimistic rendering:
     // Applying local mutations to data is a good way to make changes feel faster
     // See https://github.com/vercel/swr#mutation-and-post-request
-    mutate('/api/state', { ...data, count: count + 1 })
+    mutate('/api/state', { ...data, count: count + 1 }, false)
   }
 
   return (
