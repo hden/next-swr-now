@@ -9,13 +9,15 @@ export default function Home () {
   // SWR first returns the data from cache (stale),
   // then sends the fetch request (revalidate),
   // and finally comes with the up-to-date data again.
-  const { data, error } = useSWR('/api/state', fetcher)
+  const { data, error } = useSWR('/api/state', fetcher, {
+    refreshInterval: 3000,
+    initialData: { count: 0 }
+  })
 
   if (error) {
     return console.error(error)
   }
 
-  const count = (data || {}).count || 0
   const inc = async () => {
     // Increase the global shared state by 1
     fetch('/api/state', {
@@ -28,7 +30,7 @@ export default function Home () {
     // Optimistic rendering:
     // Applying local mutations to data is a good way to make changes feel faster
     // See https://github.com/vercel/swr#mutation-and-post-request
-    mutate('/api/state', { ...data, count: count + 1 }, false)
+    mutate('/api/state', { ...data, count: data.count + 1 }, false)
   }
 
   return (
@@ -39,7 +41,7 @@ export default function Home () {
       </Head>
 
       <main className={styles.main}>
-        <div>Current count: {count}</div>
+        <div>Current count: {data.count}</div>
         <button onClick={inc}>+</button>
       </main>
     </div>
