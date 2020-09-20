@@ -1,65 +1,47 @@
+/* eslint-env browser */
+import useSWR, { mutate } from 'swr'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 
-export default function Home() {
+const fetcher = url => fetch(url).then(r => r.json())
+
+export default function Home () {
+  // SWR first returns the data from cache (stale),
+  // then sends the fetch request (revalidate),
+  // and finally comes with the up-to-date data again.
+  const { data, error } = useSWR('/api/state', fetcher)
+
+  if (error) {
+    return console.error(error)
+  }
+
+  const count = (data || {}).count || 0
+  const inc = async () => {
+    // Increase the global shared state by 1
+    fetch('/api/state', {
+      method: 'PUT',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8'
+      },
+      body: '{"delta": 1}'
+    })
+    // Optimistic rendering:
+    // Applying local mutations to data is a good way to make changes feel faster
+    // See https://github.com/vercel/swr#mutation-and-post-request
+    mutate('/api/state', { ...data, count: count + 1 })
+  }
+
   return (
     <div className={styles.container}>
       <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>next-swr-now</title>
+        <link rel='icon' href='/favicon.ico' />
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
+        <div>Current count: {count}</div>
+        <button onClick={inc}>+</button>
       </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
     </div>
   )
 }

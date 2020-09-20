@@ -14,6 +14,16 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
 
+## API
+
+```
+# Getting the current state
+curl -v http://localhost:3000/api/state
+
+# Sending a offset
+curl -v http://localhost:3000/api/state -XPUT -H "Content-Type: application/json" -d '{"delta": 1}'
+```
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
