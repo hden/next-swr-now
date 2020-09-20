@@ -18,10 +18,10 @@ You can start editing the page by modifying `pages/index.js`. The page auto-upda
 
 ```
 # Getting the current state
-curl -v http://localhost:3000/api/state
+curl -v http://localhost:3000/api/query
 
 # Sending a offset
-curl -v http://localhost:3000/api/state -XPUT -H "Content-Type: application/json" -d '{"delta": 1}'
+curl -v http://localhost:3000/api/command -XPOST -H "Content-Type: application/json" -d '{"command": "INC", "value": 1}'
 ```
 
 ## Learn More
