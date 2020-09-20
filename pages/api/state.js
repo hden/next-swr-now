@@ -22,7 +22,7 @@ export default (req, res) => {
       break
     case 'GET':
       // Return the shared state
-      res.setHeader('Cache-Control', 's-maxage=10, stale-while-revalidate')
+      res.setHeader('Cache-Control', 's-maxage=1, stale-while-revalidate')
       res.statusCode = 200
       res.json({ count })
       break
