@@ -19,7 +19,7 @@
   "devDependencies": {
     "esm": "3.2.25",
     "intelli-espower-loader": "1.0.1",
-    "mocha": "8.2.1",
+    "mocha": "8.3.1",
     "power-assert": "1.6.1",
     "sinon": "9.2.4",
     "standard": "16.0.3"
